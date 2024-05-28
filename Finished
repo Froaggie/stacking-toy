@@ -1,0 +1,151 @@
+class Node: #define node
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class linkedlist: #define linkedlist
+    def __init__(self):
+        self.head = None
+        
+    def Index(self,index):
+        current_node = self.head
+        position = 0
+        while current_node is not None and position != index:
+            position += 1
+            current_node = current_node.next
+        return current_node
+        
+    def putatbeginning(self, data): #insert starting node
+        new_node = Node(data)
+        if self.head is None:
+            self.head = new_node
+            return
+        else:
+            new_node.next = self.head
+            self.head = new_node
+
+    def insert_sorter(self, data, index): #insert the sorter for the toy
+        new_node = Node(data)
+        current_node = self.head
+        position = 0 
+        if position == index:
+            self.insert_sorter(data)
+        else:
+            while(current_node != None and position+1 != index):
+                position = position+1
+                current_node = current_node.next
+            
+            if current_node != None:
+                new_node.next = current_node.next
+                current_node.next = new_node
+            
+            else:
+                print("That index isn't here, sorry!")
+    
+    def putatend(self, data):
+        new_node = Node(data)
+        if self.head is None:
+            self.head = new_node
+            return
+    
+        current_node = self.head
+        while(current_node.next):
+            current_node = current_node.next
+    
+        current_node.next = new_node
+
+    def replacenode(self, value, index): #change the node/toy piece
+        current_node = self.head
+        position = 0
+        if position == index:
+            current_node.data = value
+        else:
+            while(current_node != None and position != index):
+                position = position+1
+                current_node = current_node.next
+    
+            if current_node != None:
+                current_node.data = value
+            else:
+                print("That index isn't here, sorry!")
+
+    def takefirstnode(self):
+        if(self.head == None):
+            return
+        
+        self.head = self.head.next
+
+    def height_display(self): #display the stacker
+        current_node = self.head
+        while current_node:
+            rings = current_node.data
+            rings()
+            current_node = current_node.next
+            
+def red_ring(): #red ring
+    print("\033[1;31;40m       (((())))")
+def yellow_ring(): #yellow ring
+    print("\033[1;33;40m      ((((()))))")
+def green_ring(): #green ring
+    print("\033[1;32;40m     (((((())))))")
+def blue_ring(): #blue ring
+    print("\033[1;34;40m    ((((((()))))))")
+def purple_ring(): #purple ring
+    print("\033[1;35;40m   (((((((())))))))")
+    
+def toy_base(): #base of the stacker
+    print("\033[1;37;40m [[[[[[[[[[]]]]]]]]]]")
+def middle_pole(): #pole in the middle
+    print("\033[1;37;40m         [!!]")
+
+   
+stack = [middle_pole, red_ring, yellow_ring, green_ring, blue_ring, purple_ring, toy_base] #the stack arrangement
+'''for x in range(len(stack)):
+    stack[x]()'''
+stacked = linkedlist()
+for y in range(len(stack)):
+    stacked.putatend(stack[y])
+'''    
+stacked.height_display()
+current_node = stacked.head
+index = 0
+while current_node is not None:
+    stacked.replacenode(middle_pole, index)
+    current_node = current_node.next
+    index += 1
+    stacked.replacenode(toy_base, 6)
+    '''
+stacked.height_display
+
+def picked(): #the talking code, how to account for the commands
+    isringthere = []
+    x = 1
+    while True:
+        while(x != 8):
+            stacked.height_display()
+            PICK = input("1. remove a ring from the stack \n 2. add a ring to the stack \n")
+            if (PICK == "1" and x <= 5):
+                ringthere = stacked.Index(x)
+                isringthere.insert(0, ringthere.data)
+                stacked.replacenode(middle_pole, x)
+                x = x+1
+            elif (PICK == "1" and x >= 5):
+                print("Sorry! There are no more rings left to remove.")
+            elif (PICK == "2"):
+                print("The rings you can add are:")
+                for y in range(len(isringthere)):
+                    fun_name = isringthere[y].__name__
+                    print(fun_name)
+                if(len(isringthere) == 0):
+                    print("It seems the stack has all its rings!")
+                elif(len(isringthere) > 0):
+                    color = input("Pick which color you would like to put into the stack! red, yellow, green, blue, or purple \n")
+                    picked_ring = globals()[f'{color}_ring'] #what ring you want to add/place
+                    if picked_ring in isringthere:
+                        x = x - 1
+                        isringthere.remove(picked_ring)
+                        stacked.replacenode(picked_ring, x)
+                    else:
+                        print("Sorry! That rings not here at the moment")
+                        
+picked()
